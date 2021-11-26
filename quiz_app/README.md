@@ -1,6 +1,8 @@
 # quiz_app
 
-A new Flutter project.
+![cover](../images/quiz_cover.png)
+
+A simple quiz application.
 
 ## Getting Started
 
