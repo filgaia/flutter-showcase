@@ -27,11 +27,11 @@ class Chart extends StatelessWidget {
           print(totalSum);
 
           return {
-            'day': DateFormat.E().format(weekDay).substring(0, 1),
+            'day': DateFormat.E().format(weekDay).substring(0, 2),
             'amount': totalSum,
           };
         },
-      );
+      ).reversed.toList();
 
   double get maxSpending => groupTransactionValues.fold(
         0,
@@ -45,16 +45,25 @@ class Chart extends StatelessWidget {
     return Card(
       elevation: 6,
       margin: EdgeInsets.all(20),
-      child: Row(
-        children: groupTransactionValues
-            .map(
-              (e) => ChartBar(
-                e['day'] as String,
-                e['amount'] as double,
-                maxSpending == 0 ? 0 : (e['amount'] as double) / maxSpending,
-              ),
-            )
-            .toList(),
+      child: Padding(
+        padding: EdgeInsets.all(10),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: groupTransactionValues
+              .map(
+                (e) => Flexible(
+                  fit: FlexFit.tight,
+                  child: ChartBar(
+                    e['day'] as String,
+                    e['amount'] as double,
+                    maxSpending == 0
+                        ? 0
+                        : (e['amount'] as double) / maxSpending,
+                  ),
+                ),
+              )
+              .toList(),
+        ),
       ),
     );
   }
