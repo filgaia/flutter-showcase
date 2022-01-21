@@ -27,6 +27,7 @@ class _HomeState extends State<Home> {
     //   date: DateTime.now(),
     // ),
   ];
+  bool _showChart = false;
 
   List<Transaction> get _recentTransactions => _userTransactions
       .where(
@@ -38,14 +39,20 @@ class _HomeState extends State<Home> {
       )
       .toList();
 
-  void _addTransaction(String txTitle, double txAmount) {
+  void _addTransaction(String txTitle, double txAmount, DateTime chosenDate) {
     final newTx = Transaction(
       id: DateTime.now().toString(),
       title: txTitle,
       amount: txAmount,
-      date: DateTime.now(),
+      date: chosenDate,
     );
     setState(() => _userTransactions.add(newTx));
+  }
+
+  void _deleteTransaction(String id) {
+    setState(
+      () => _userTransactions.removeWhere((element) => element.id == id),
+    );
   }
 
   void _showAddTransaction(BuildContext ctx) {
@@ -61,22 +68,54 @@ class _HomeState extends State<Home> {
 
   @override
   Widget build(BuildContext context) {
+    final isLandscape =
+        MediaQuery.of(context).orientation == Orientation.landscape;
+    final appBar = AppBar(
+      title: Text('Personal expenses!'),
+      actions: [
+        IconButton(
+            onPressed: () => _showAddTransaction(context),
+            icon: Icon(Icons.add))
+      ],
+    );
+
+    final containerHeight = (MediaQuery.of(context).size.height -
+        MediaQuery.of(context).padding.top -
+        appBar.preferredSize.height);
+
+    final chartWidget = (rate) => Container(
+          child: Chart(_recentTransactions),
+          height: containerHeight * rate,
+        );
+
+    final txListWidget = Container(
+      child: TransactionList(_userTransactions, _deleteTransaction),
+      height: containerHeight * 0.7,
+    );
+
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Personal expenses!'),
-        actions: [
-          IconButton(
-              onPressed: () => _showAddTransaction(context),
-              icon: Icon(Icons.add))
-        ],
-      ),
+      appBar: appBar,
       body: SingleChildScrollView(
         child: Column(
           // mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            Chart(_recentTransactions),
-            TransactionList(_userTransactions),
+            if (isLandscape)
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text('Show chart'),
+                  Switch(
+                    value: _showChart,
+                    onChanged: (val) {
+                      setState(() => _showChart = val);
+                    },
+                  ),
+                ],
+              ),
+            if (!isLandscape) chartWidget(0.3),
+            if (!isLandscape) txListWidget,
+            if (isLandscape) _showChart ? chartWidget(0.7) : txListWidget,
           ],
         ),
       ),

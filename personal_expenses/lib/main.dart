@@ -1,14 +1,24 @@
 import 'package:flutter/material.dart';
+// import 'package:flutter/services.dart';
 
 import './widgets/home.dart';
 
-void main() => runApp(MyApp());
+void main() {
+  /* WidgetsFlutterBinding.ensureInitialized();
+  SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitUp,
+    DeviceOrientation.portraitDown,
+  ]); */
+  runApp(MyApp());
+}
 
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final ThemeData theme = ThemeData(
       primarySwatch: Colors.purple,
+      // Default
+      // errorColor: Colors.red,
       fontFamily: 'Quicksand',
       textTheme: ThemeData.light().textTheme.copyWith(
           headline6: TextStyle(
