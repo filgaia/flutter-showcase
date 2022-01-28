@@ -7,7 +7,7 @@ class TransactionList extends StatelessWidget {
   final List<Transaction> transactions;
   final Function removeHandler;
 
-  TransactionList(this.transactions, this.removeHandler);
+  const TransactionList(this.transactions, this.removeHandler);
 
   @override
   Widget build(BuildContext context) {
@@ -19,8 +19,8 @@ class TransactionList extends StatelessWidget {
                   'No transactions added yet...',
                   style: Theme.of(context).textTheme.headline6,
                 ),
-                SizedBox(height: 20),
-                Container(
+                const SizedBox(height: 20),
+                SizedBox(
                   height: constraints.maxHeight * 0.6,
                   child: Image.asset(
                     'assets/images/waiting.png',
@@ -75,7 +75,7 @@ class TransactionList extends StatelessWidget {
               )), */
             itemBuilder: (ctx, index) => Card(
               elevation: 5,
-              margin: EdgeInsets.symmetric(
+              margin: const EdgeInsets.symmetric(
                 vertical: 8,
                 horizontal: 5,
               ),
@@ -83,7 +83,7 @@ class TransactionList extends StatelessWidget {
                 leading: CircleAvatar(
                   radius: 30,
                   child: Padding(
-                    padding: EdgeInsets.all(6),
+                    padding: const EdgeInsets.all(6),
                     child: FittedBox(
                       child: Text(
                           '\$ ${transactions[index].amount.toStringAsFixed(2)}'),
@@ -107,7 +107,7 @@ class TransactionList extends StatelessWidget {
                           Icons.delete,
                           color: Theme.of(context).errorColor,
                         ),
-                        label: Text('Delete'),
+                        label: const Text('Delete'),
                       )
                     : IconButton(
                         onPressed: () => removeHandler(transactions[index].id),

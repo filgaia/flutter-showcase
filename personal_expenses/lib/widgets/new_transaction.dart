@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
+import './adaptive_text_button.dart';
+
 class NewTransaction extends StatefulWidget {
   // String? titleInput;
   // String? amountInput;
   final Function addHandler;
 
-  NewTransaction(this.addHandler);
+  const NewTransaction(this.addHandler);
 
   @override
   State<NewTransaction> createState() => _NewTransactionState();
@@ -63,19 +65,19 @@ class _NewTransactionState extends State<NewTransaction> {
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
               TextField(
-                decoration: InputDecoration(labelText: 'Title'),
+                decoration: const InputDecoration(labelText: 'Title'),
                 controller: _titleController,
                 // onChanged: (value) => titleInput = value,
                 onSubmitted: (_) => _submitData(),
               ),
               TextField(
-                decoration: InputDecoration(labelText: 'Amount'),
+                decoration: const InputDecoration(labelText: 'Amount'),
                 controller: _amountController,
                 // onChanged: (value) => amountInput = value,
                 keyboardType: TextInputType.number,
                 onSubmitted: (_) => _submitData(),
               ),
-              Container(
+              SizedBox(
                 height: 70,
                 child: Row(
                   children: [
@@ -84,19 +86,13 @@ class _NewTransactionState extends State<NewTransaction> {
                           ? 'No date chosen!'
                           : 'Picked date: ${DateFormat.yMd().format(_selectedDate!)}'),
                     ),
-                    TextButton(
-                      onPressed: _showDatePicker,
-                      child: Text(
-                        'Choose date',
-                        style: TextStyle(fontWeight: FontWeight.bold),
-                      ),
-                    )
+                    AdaptiveTextButton('Choose date', _showDatePicker)
                   ],
                 ),
               ),
               ElevatedButton(
                 onPressed: _submitData,
-                child: Text('Add transaction'),
+                child: const Text('Add transaction'),
               )
             ],
           ),

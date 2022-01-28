@@ -9,10 +9,12 @@ void main() {
     DeviceOrientation.portraitUp,
     DeviceOrientation.portraitDown,
   ]); */
-  runApp(MyApp());
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
+  const MyApp({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     final ThemeData theme = ThemeData(
@@ -21,13 +23,13 @@ class MyApp extends StatelessWidget {
       // errorColor: Colors.red,
       fontFamily: 'Quicksand',
       textTheme: ThemeData.light().textTheme.copyWith(
-          headline6: TextStyle(
+          headline6: const TextStyle(
             fontFamily: 'OpenSans',
             fontSize: 18,
             fontWeight: FontWeight.bold,
           ),
-          button: TextStyle(color: Colors.white)),
-      appBarTheme: AppBarTheme(
+          button: const TextStyle(color: Colors.white)),
+      appBarTheme: const AppBarTheme(
         titleTextStyle: TextStyle(
           fontFamily: 'OpenSans',
           fontSize: 20,
@@ -41,7 +43,7 @@ class MyApp extends StatelessWidget {
       theme: theme.copyWith(
         colorScheme: theme.colorScheme.copyWith(secondary: Colors.amber),
       ),
-      home: Home(),
+      home: const Home(),
     );
   }
 }

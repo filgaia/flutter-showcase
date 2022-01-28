@@ -1,11 +1,18 @@
+import 'dart:io';
+
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+import './adaptive_app_bar.dart';
 import './chart.dart';
 import './new_transaction.dart';
+import './switch_chart.dart';
 import './transaction_list.dart';
 import '../models/transaction.dart';
 
 class Home extends StatefulWidget {
+  const Home({Key? key}) : super(key: key);
+
   // String titleInput;
   // String amountInput;
   @override
@@ -33,7 +40,7 @@ class _HomeState extends State<Home> {
       .where(
         (tx) => tx.date.isAfter(
           DateTime.now().subtract(
-            Duration(days: 7),
+            const Duration(days: 7),
           ),
         ),
       )
@@ -66,64 +73,62 @@ class _HomeState extends State<Home> {
     );
   }
 
+  void _switchChartVisibility(val) => setState(() => _showChart = val);
+
   @override
   Widget build(BuildContext context) {
-    final isLandscape =
-        MediaQuery.of(context).orientation == Orientation.landscape;
-    final appBar = AppBar(
-      title: Text('Personal expenses!'),
-      actions: [
-        IconButton(
-            onPressed: () => _showAddTransaction(context),
-            icon: Icon(Icons.add))
-      ],
+    final mediaQuery = MediaQuery.of(context);
+    final isLandscape = mediaQuery.orientation == Orientation.landscape;
+    final PreferredSizeWidget appBar = AdaptiveAppBar(
+      'Personal expenses!',
+      _showAddTransaction,
     );
 
-    final containerHeight = (MediaQuery.of(context).size.height -
-        MediaQuery.of(context).padding.top -
+    final containerHeight = (mediaQuery.size.height -
+        mediaQuery.padding.top -
         appBar.preferredSize.height);
 
-    final chartWidget = (rate) => Container(
+    chartWidget(rate) => SizedBox(
           child: Chart(_recentTransactions),
           height: containerHeight * rate,
         );
 
-    final txListWidget = Container(
+    final txListWidget = SizedBox(
       child: TransactionList(_userTransactions, _deleteTransaction),
       height: containerHeight * 0.7,
     );
 
-    return Scaffold(
-      appBar: appBar,
-      body: SingleChildScrollView(
+    final appBody = SafeArea(
+      child: SingleChildScrollView(
         child: Column(
           // mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            if (isLandscape)
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text('Show chart'),
-                  Switch(
-                    value: _showChart,
-                    onChanged: (val) {
-                      setState(() => _showChart = val);
-                    },
-                  ),
-                ],
-              ),
+            if (isLandscape) SwitchChart(_showChart, _switchChartVisibility),
             if (!isLandscape) chartWidget(0.3),
             if (!isLandscape) txListWidget,
             if (isLandscape) _showChart ? chartWidget(0.7) : txListWidget,
           ],
         ),
       ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-      floatingActionButton: FloatingActionButton(
-        child: Icon(Icons.add),
-        onPressed: () => _showAddTransaction(context),
-      ),
     );
+
+    return Platform.isIOS
+        ? CupertinoPageScaffold(
+            child: appBody,
+            navigationBar: appBar as ObstructingPreferredSizeWidget,
+          )
+        : Scaffold(
+            appBar: appBar as PreferredSizeWidget,
+            body: appBody,
+            floatingActionButtonLocation:
+                FloatingActionButtonLocation.centerFloat,
+            floatingActionButton: Platform.isIOS
+                ? Container()
+                : FloatingActionButton(
+                    child: const Icon(Icons.add),
+                    onPressed: () => _showAddTransaction(context),
+                  ),
+          );
   }
 }
