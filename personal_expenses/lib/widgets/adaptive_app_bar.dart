@@ -9,29 +9,32 @@ class AdaptiveAppBar extends StatelessWidget implements PreferredSizeWidget {
 
   const AdaptiveAppBar(this.title, this.tapHandler);
 
+  PreferredSizeWidget _buildIOS(BuildContext context) => CupertinoNavigationBar(
+        middle: Text(title),
+        trailing: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            GestureDetector(
+              child: const Icon(CupertinoIcons.add),
+              onTap: () => tapHandler(context),
+            ),
+          ],
+        ),
+      );
+
+  PreferredSizeWidget _buildAndroid(BuildContext context) => AppBar(
+        title: Text(title),
+        actions: [
+          IconButton(
+            onPressed: () => tapHandler(context),
+            icon: const Icon(Icons.add),
+          )
+        ],
+      );
+
   @override
   Widget build(BuildContext context) {
-    return (Platform.isIOS
-        ? CupertinoNavigationBar(
-            middle: Text(title),
-            trailing: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                GestureDetector(
-                  child: const Icon(CupertinoIcons.add),
-                  onTap: () => tapHandler(context),
-                ),
-              ],
-            ),
-          )
-        : AppBar(
-            title: Text(title),
-            actions: [
-              IconButton(
-                  onPressed: () => tapHandler(context),
-                  icon: const Icon(Icons.add))
-            ],
-          )) as PreferredSizeWidget;
+    return Platform.isIOS ? _buildIOS(context) : _buildAndroid(context);
   }
 
   @override

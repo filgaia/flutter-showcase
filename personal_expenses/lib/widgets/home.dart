@@ -75,6 +75,21 @@ class _HomeState extends State<Home> {
 
   void _switchChartVisibility(val) => setState(() => _showChart = val);
 
+  Widget _chartWidget(double height, double rate) => SizedBox(
+        child: Chart(_recentTransactions),
+        height: height * rate,
+      );
+
+  List<Widget> _buildLandscape(double height, Widget txListWidget) => [
+        SwitchChart(_showChart, _switchChartVisibility),
+        _showChart ? _chartWidget(height, 0.7) : txListWidget
+      ];
+
+  List<Widget> _buildPortrait(double height, Widget txListWidget) => [
+        _chartWidget(height, 0.3),
+        txListWidget,
+      ];
+
   @override
   Widget build(BuildContext context) {
     final mediaQuery = MediaQuery.of(context);
@@ -88,11 +103,6 @@ class _HomeState extends State<Home> {
         mediaQuery.padding.top -
         appBar.preferredSize.height);
 
-    chartWidget(rate) => SizedBox(
-          child: Chart(_recentTransactions),
-          height: containerHeight * rate,
-        );
-
     final txListWidget = SizedBox(
       child: TransactionList(_userTransactions, _deleteTransaction),
       height: containerHeight * 0.7,
@@ -104,10 +114,8 @@ class _HomeState extends State<Home> {
           // mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            if (isLandscape) SwitchChart(_showChart, _switchChartVisibility),
-            if (!isLandscape) chartWidget(0.3),
-            if (!isLandscape) txListWidget,
-            if (isLandscape) _showChart ? chartWidget(0.7) : txListWidget,
+            if (isLandscape) ..._buildLandscape(containerHeight, txListWidget),
+            if (!isLandscape) ..._buildPortrait(containerHeight, txListWidget),
           ],
         ),
       ),

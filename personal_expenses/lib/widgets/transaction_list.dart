@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 
+import './transaction_item.dart';
 import '../models/transaction.dart';
 
 class TransactionList extends StatelessWidget {
@@ -30,95 +30,13 @@ class TransactionList extends StatelessWidget {
               ],
             ),
           )
-        : ListView.builder(
-            // Alternative to itemBuilder
-            /* itemBuilder: (ctx, index) => Card(
-                  child: Row(
-                children: [
-                  Container(
-                    child: Text(
-                      '\$ ${transactions[index].amount.toStringAsFixed(2)}',
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 20,
-                        color: Theme.of(context).primaryColor,
-                      ),
-                    ),
-                    margin: EdgeInsets.symmetric(
-                      vertical: 10,
-                      horizontal: 15,
-                    ),
-                    padding: EdgeInsets.all(10),
-                    decoration: BoxDecoration(
-                      border: Border.all(
-                        color: Theme.of(context).primaryColor,
-                        width: 2,
-                      ),
-                    ),
-                  ),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        transactions[index].title,
-                        style: Theme.of(context).textTheme.headline6,
-                      ),
-                      Text(
-                        DateFormat.yMMMd().format(transactions[index].date),
-                        style: TextStyle(
-                          color: Colors.grey,
-                        ),
-                      ),
-                    ],
-                  )
-                ],
-              )), */
-            itemBuilder: (ctx, index) => Card(
-              elevation: 5,
-              margin: const EdgeInsets.symmetric(
-                vertical: 8,
-                horizontal: 5,
-              ),
-              child: ListTile(
-                leading: CircleAvatar(
-                  radius: 30,
-                  child: Padding(
-                    padding: const EdgeInsets.all(6),
-                    child: FittedBox(
-                      child: Text(
-                          '\$ ${transactions[index].amount.toStringAsFixed(2)}'),
-                    ),
-                  ),
-                ),
-                title: Text(
-                  transactions[index].title,
-                  style: Theme.of(context).textTheme.headline6,
-                ),
-                subtitle: Text(
-                  DateFormat.yMMMd().format(transactions[index].date),
-                ),
-                trailing: MediaQuery.of(context).size.width > 360
-                    ? TextButton.icon(
-                        style: TextButton.styleFrom(
-                          primary: Theme.of(context).errorColor,
-                        ),
-                        onPressed: () => removeHandler(transactions[index].id),
-                        icon: Icon(
-                          Icons.delete,
-                          color: Theme.of(context).errorColor,
-                        ),
-                        label: const Text('Delete'),
-                      )
-                    : IconButton(
-                        onPressed: () => removeHandler(transactions[index].id),
-                        icon: Icon(
-                          Icons.delete,
-                          color: Theme.of(context).errorColor,
-                        ),
-                      ),
-              ),
-            ),
-            itemCount: transactions.length,
-          );
+        : ListView(
+            children: transactions
+                .map((tx) => TransactionItem(
+                      key: ValueKey(tx.id),
+                      transaction: tx,
+                      removeHandler: removeHandler,
+                    ))
+                .toList());
   }
 }
