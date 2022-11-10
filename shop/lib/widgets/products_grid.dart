@@ -11,9 +11,8 @@ class ProductsGrid extends StatelessWidget {
   Widget build(BuildContext context) {
     final productsData = Provider.of<Products>(context);
     final products = productsData.items;
-
     return GridView.builder(
-      padding: const EdgeInsets.all(10),
+      padding: const EdgeInsets.all(10.0),
       itemCount: products.length,
       itemBuilder: (ctx, i) => ProductItem(
         products[i].id,

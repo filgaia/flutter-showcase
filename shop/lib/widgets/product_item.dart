@@ -18,14 +18,19 @@ class ProductItem extends StatelessWidget {
         footer: GridTileBar(
           backgroundColor: Colors.black87,
           leading: IconButton(
-            onPressed: () {},
             icon: const Icon(Icons.favorite),
             color: Theme.of(context).colorScheme.secondary,
-          ),
-          title: Text(title, textAlign: TextAlign.center),
-          trailing: IconButton(
             onPressed: () {},
-            icon: const Icon(Icons.shopping_cart),
+          ),
+          title: Text(
+            title,
+            textAlign: TextAlign.center,
+          ),
+          trailing: IconButton(
+            icon: const Icon(
+              Icons.shopping_cart,
+            ),
+            onPressed: () {},
             color: Theme.of(context).colorScheme.secondary,
           ),
         ),
@@ -36,7 +41,10 @@ class ProductItem extends StatelessWidget {
               arguments: id,
             );
           },
-          child: Image.network(imageUrl, fit: BoxFit.cover),
+          child: Image.network(
+            imageUrl,
+            fit: BoxFit.cover,
+          ),
         ),
       ),
     );
