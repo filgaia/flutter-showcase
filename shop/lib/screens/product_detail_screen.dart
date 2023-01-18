@@ -22,7 +22,7 @@ class ProductDetailScreen extends StatelessWidget {
     ).findById(productId);
     return Scaffold(
       appBar: AppBar(
-        title: Text(loadedProduct.title),
+        title: Text(loadedProduct.title!),
       ),
       body: SingleChildScrollView(
         child: Column(
@@ -31,7 +31,7 @@ class ProductDetailScreen extends StatelessWidget {
               height: 300,
               width: double.infinity,
               child: Image.network(
-                loadedProduct.imageUrl,
+                loadedProduct.imageUrl!,
                 fit: BoxFit.cover,
               ),
             ),
@@ -50,7 +50,7 @@ class ProductDetailScreen extends StatelessWidget {
               padding: const EdgeInsets.symmetric(horizontal: 10),
               width: double.infinity,
               child: Text(
-                loadedProduct.description,
+                loadedProduct.description!,
                 textAlign: TextAlign.center,
                 softWrap: true,
               ),
