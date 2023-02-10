@@ -46,7 +46,7 @@ class CartItem extends StatelessWidget {
             content: const Text(
               'Do you want to remove the item from the cart?',
             ),
-            actions: [
+            actions: <Widget>[
               TextButton(
                 child: const Text('No'),
                 onPressed: () {
